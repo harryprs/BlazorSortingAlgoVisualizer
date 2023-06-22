@@ -1,0 +1,239 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<div class="header">
+	<h1>Sorting Algorithm Visualizer</h1>
+</div>
+
+<div class="settings-row">
+	<table>
+		<td>Speed:</td>
+		<td><input type="range" min="1" max="100" class="slider speed-range" @bind="delay" /></td>
+		<td>Size:</td>
+		<td><input @bind="sizeOfArray">100</input></td>
+		<td><input type="button" value="Generate Array" @onclick="GenerateArray" disabled="@isDisabled" /></td>
+		<td><input type="button" value="Shuffle Array" @onclick="ShuffleArray" disabled="@isDisabled" /></td>
+	</table>
+</div>
+
+<div class="algorithm-row">
+	<input type="button" value="Quick Sort" @onclick="QuickSortRun" disabled="@isDisabled" />
+	<input type="button" value="Bubble Sort" @onclick="BubbleSort" disabled="@isDisabled" />
+	<input type="button" value="Insertion Sort" @onclick="InsertionSort" disabled="@isDisabled" />
+	<input type="button" value="Selection Sort" @onclick="SelectionSort" disabled="@isDisabled" />
+</div>
+
+<div class="array-container">
+	@for(var i = 0; i < array.Length; i++)
+	{
+		<div class="array-bar" style=@($"height: {@array[i]}px; {GetBarBackground(i)}; width: 10px;") />
+	}
+</div>
+
+
+@code {
+	private int delay = 20;
+	private int sizeOfArray = 100;
+	private int leftBar = -1;
+	private int rightBar = -1;
+	private int pivotBar = -1;
+	private int movedBar = -1;
+	private bool isDisabled = false;
+	private int[] array = new int[]{};
+	private List<int> sortedPortion = new List<int>();
+	private ArrayBuilder arrayBuilder = new ArrayBuilder();
+
+	protected override async Task OnInitializedAsync()
+	{
+		GenerateArray();
+	}
+
+	private void GenerateArray()
+	{
+		ClearStyling();
+		sortedPortion.Clear();
+		array = arrayBuilder.GenerateArray(sizeOfArray);
+	}
+
+	private void ShuffleArray()
+	{
+		ClearStyling();
+		sortedPortion.Clear();
+		array = arrayBuilder.ShuffleArray(array);
+	}
+
+	private void ClearStyling()
+	{
+		leftBar = -1;
+		rightBar = -1;
+		pivotBar = -1;
+		movedBar = -1;
+		StateHasChanged();
+	}
+
+	private async void QuickSortRun()
+	{
+		isDisabled = true;
+		await QuickSort(0, array.Length - 1);
+
+		for (int i = 0; i < array.Length; i++)
+		{
+			sortedPortion.Add(i);
+			await Task.Delay(10);
+			StateHasChanged();
+		}
+		isDisabled = false;
+		ClearStyling();
+	}
+
+	private async Task QuickSort(int leftIndex, int rightIndex)
+	{
+		var i = leftIndex;
+		var j = rightIndex;
+		var pivot = array[leftIndex];
+		pivotBar = leftIndex;
+		while (i <= j)
+		{
+			while (array[i] < pivot)
+			{
+				i++;
+			}
+
+			while (array[j] > pivot)
+			{
+				j--;
+			}
+			if (i <= j)
+			{
+				leftBar = i;
+				rightBar = j;
+				int temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+				await Task.Delay(delay);
+				i++;
+				j--;
+			}
+			StateHasChanged();
+		}
+
+		if (leftIndex < j)
+			await QuickSort(leftIndex, j);
+		if (i < rightIndex)
+			await QuickSort(i, rightIndex);
+	}
+
+	private async void InsertionSort()
+	{
+		isDisabled = true;
+
+		for (int i = 1; i < array.Length; i++)
+		{
+			int j = i;
+			while (j >= 1 && array[j] < array[j - 1])
+			{
+				rightBar = j-1;
+				int temp = array[j];
+				array[j] = array[j - 1];
+				array[j - 1] = temp;
+				j--;
+				await Task.Delay(delay);
+				StateHasChanged();
+			}
+			movedBar = j;
+		}
+
+		for(int i = 0; i < array.Length; i++)
+		{
+			sortedPortion.Add(i);
+			await Task.Delay(10);
+			StateHasChanged();
+		}
+		isDisabled = false;
+		ClearStyling();
+	}
+
+	private async void BubbleSort()
+	{
+		isDisabled = true;
+
+		for(int i = array.Length-1; i >= 0; i--)
+		{
+			for(int j = 0; j < i; j++)
+			{
+				leftBar = j;
+				rightBar = j + 1;
+				if(array[j] > array[j+1])
+				{
+					int temp = array[j];
+					array[j] = array[j + 1];
+					array[j + 1] = temp;
+					await Task.Delay(delay);
+					StateHasChanged();
+				}
+			}
+			sortedPortion.Add(i);
+			StateHasChanged();
+		}
+		isDisabled = false;
+		ClearStyling();
+	}
+
+	private async void SelectionSort()
+	{
+		isDisabled = true;
+		int min;
+		for(int i = 0; i < array.Length; i++)
+		{
+			min = i;
+			movedBar = i;
+			for(int j = i+1; j < array.Length; j++)
+			{
+				if(array[j] < array[min])
+				{
+					min = j;
+					rightBar = min;
+					StateHasChanged();
+				}
+			}
+			if(min != i)
+			{
+				int temp = array[min];
+				array[min] = array[i];
+				array[i] = temp;
+				await Task.Delay(delay);
+
+			}
+			sortedPortion.Add(i);
+			StateHasChanged();
+		}
+		isDisabled = false;
+		ClearStyling();
+	}
+
+	private string GetBarBackground(int i)
+	{
+		if (sortedPortion.Contains(i))
+		{
+			return "background-color: white";
+		}
+
+		if (i == leftBar || i == rightBar)
+		{
+			return "background-color: red";
+		}
+
+		if(i == pivotBar)
+		{
+			return "background-color: purple";
+		}
+
+		if(i == movedBar)
+		{
+			return "background-color: yellow";
+		}
+
+		return "background-color: grey";
+	}
+}
