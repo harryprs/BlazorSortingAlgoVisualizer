@@ -7,14 +7,18 @@
 </div>
 
 <div class="settings-row">
-	<table>
-		<td>Speed:</td>
-		<td><input type="range" min="1" max="100" class="slider speed-range" @bind="settings.Delay" /></td>
-		<td>Size:</td>
-		<td><input @bind="settings.ArraySize">100</input></td>
-		<td><input type="button" value="Generate Array" @onclick="GenerateArray" disabled="@settings.IsDisabled" /></td>
-		<td><input type="button" value="Shuffle Array" @onclick="ShuffleArray" disabled="@settings.IsDisabled" /></td>
-	</table>
+	<div>
+		Speed:
+		<input type="range" min="1" max="100" class="slider speed-range" @bind="settings.Delay" />
+	</div>
+	<div>
+		Size:
+		<input @bind="settings.ArraySize">100</input>
+	</div>
+	<div>
+		<input type="button" value="Generate Array" @onclick="GenerateArray" disabled="@settings.IsDisabled" />
+		<input type="button" value="Shuffle Array" @onclick="ShuffleArray" disabled="@settings.IsDisabled" />
+	</div>
 </div>
 
 <div class="algorithm-row">
@@ -27,7 +31,7 @@
 <div class="array-container">
 	@for(var i = 0; i < array.Length; i++)
 	{
-		<div class="array-bar" style=@($"height: {@array[i]}px; {GetBarBackground(i)}; width: 10px;") />
+		<div style=@($"height: {@array[i]}px; {GetBarBackground(i)}; width: {GetBarWidth()}%;") />
 	}
 </div>
 
@@ -51,7 +55,8 @@
 	{
 		ClearStyling();
 		sortedPortion.Clear();
-		array = arrayBuilder.GenerateArray(settings.ArraySize);
+		settings.FinalArraySize = settings.ArraySize;
+		array = arrayBuilder.GenerateArray(settings.FinalArraySize);
 	}
 
 	private void ShuffleArray()
@@ -233,5 +238,11 @@
 		}
 
 		return "background-color: grey";
+	}
+
+	private double GetBarWidth()
+	{
+		double barWidth = 100.0 / settings.FinalArraySize;
+		return barWidth;
 	}
 }

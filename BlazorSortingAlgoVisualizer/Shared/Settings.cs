@@ -9,6 +9,8 @@
 			set => arraySize = value < 2 ? 2 : value > 600 ? 600 : value;
 		}
 
+		public int FinalArraySize { get; set; }
+
 		private int delay;
 		public int Delay
 		{
