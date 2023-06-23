@@ -7,7 +7,7 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "BlazorSortingAlgoVisualizer.dll": "sha256-vhc++zQcs3Q9LJ6BT+AxvPilML8+FCjmoZuM3+r8NE4=",
+      "BlazorSortingAlgoVisualizer.dll": "sha256-rETCuCk3oa62j+JLUiQjTDtNgSP76kczkZYQvOmpmYo=",
       "Microsoft.AspNetCore.Components.dll": "sha256-1\/VGWXH\/FBPF8hnZYQzC0dJ9c+AmPCnBbtPxawA5j2I=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-UnIGQFqnXGoP7xA\/ftzRiN+1v3dnNmBmIUqreDSwbBE=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-tpvXX7M\/LEGTEvYWgu8LEXMhjtjwoFAKuxUiqdpIH2E=",
@@ -40,7 +40,7 @@
     "libraryInitializers": null,
     "pdb": null,
     "runtime": {
-      "dotnet.7.0.8.d0uyiuzlka.js": "sha256-4oWyIFbYUnV9Q2SEb8hUA+EdUAixRYTsq5lvTIGL8II=",
+      "dotnet.7.0.8.hd2po4i3wf.js": "sha256-4oWyIFbYUnV9Q2SEb8hUA+EdUAixRYTsq5lvTIGL8II=",
       "dotnet.timezones.blat": "sha256-QnMUV9XSTTgPmYfZSUCB+B4wJgnqYpTMFeMRJsCPF64=",
       "dotnet.wasm": "sha256-Mc8bBjap3zzByduBb51o+c5H7N3hI23EFV9LgRs+SIM=",
       "icudt_CJK.dat": "sha256-SZLtQnRc0JkwqHab0VUVP7T3uBPSeYzxzDnpxPpUnHk=",
